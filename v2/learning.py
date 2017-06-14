@@ -6,6 +6,9 @@ import network
 
 import os
 
+
+
+
 img_w = img_h = 64
 nb_epoch = 1
 iterations = 25
@@ -19,11 +22,12 @@ else:
     input_shape = (img_w, img_h, 1)
 
 
-def train():
+def train(path):
+    print (os.path.join(path,"results/data"))
     model = network.init_model(imggen.LABEL_SIZE, input_shape)
     model.compile(loss='categorical_crossentropy',
                   optimizer='adadelta', metrics=['accuracy'])
-    tensorboard = TensorBoard(log_dir='./logs',
+    tensorboard = TensorBoard(log_dir=os.path.join(path,'logs'),
                               histogram_freq=0,
                               write_graph=True, write_images=True)
 
@@ -37,9 +41,10 @@ def train():
                   epochs=epoch + 1, verbose=1,
                   validation_split=0.1, callbacks=[tensorboard],
                   initial_epoch=epoch)
-    if not os.path.exists('results/data'):
-        os.makedirs('results/data')
-    model.save_weights('results/data/model%d.h5' % (epoch))
+    if not os.path.exists(os.path.join(path,'results/data')):
+        os.makedirs(os.path.join(join,'results/data'))
+    #model.save_weights(os.path.join(path,'results/data/model%d.h5' )% (epoch))
+    model.save_weights('/home/shota/results/data/model.h5')
 
     (x_test, y_test) = imggen.next_batch(TEST_SET_SIZE)
     score = model.evaluate(x_test, y_test)
