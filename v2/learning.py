@@ -43,8 +43,7 @@ def train(path):
                   initial_epoch=epoch)
     if not os.path.exists(os.path.join(path,'results/data')):
         os.makedirs(os.path.join(join,'results/data'))
-    #model.save_weights(os.path.join(path,'results/data/model%d.h5' )% (epoch))
-    model.save_weights('/home/shota/results/data/model.h5')
+    model.save_weights(os.path.join(path,'results/data/model%d.h5' )% (epoch))
 
     (x_test, y_test) = imggen.next_batch(TEST_SET_SIZE)
     score = model.evaluate(x_test, y_test)
